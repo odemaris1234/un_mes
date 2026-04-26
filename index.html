@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Rey Yosh 🖤</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@400;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle, #1a1a1a 0%, #000000 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        /* Partículas doradas */
+        .chispa {
+            position: absolute;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.4;
+            animation: subir linear infinite;
+        }
+        @keyframes subir {
+            0% { transform: translateY(110vh); opacity: 0; }
+            100% { transform: translateY(-10vh); opacity: 0; }
+        }
+
+        /* Mensajes cayendo */
+        .msg-amor {
+            position: absolute;
+            color: rgba(255, 215, 0, 0.8);
+            font-size: 0.8rem;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 10;
+            animation: caer linear forwards;
+            white-space: nowrap;
+        }
+        @keyframes caer {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(20deg); opacity: 0; }
+        }
+
+        /* ================= SOBRE ================= */
+        #pantalla-sobre {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 300;
+            background: inherit;
+        }
+
+        .texto-for-you {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+            letter-spacing: 5px;
+        }
+
+        .el-sobre {
+            position: relative;
+            width: 280px;
+            height: 180px;
+            background: #222;
+            border-radius: 10px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            cursor: pointer;
+        }
+
+        .el-sobre::before {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            border-left: 140px solid transparent; border-right: 140px solid transparent;
+            border-bottom: 100px solid #333; z-index: 3; border-radius: 0 0 10px 10px;
+        }
+        .el-sobre::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            border-top: 90px solid transparent; border-bottom: 90px solid transparent;
+            border-left: 140px solid #2a2a2a; z-index: 2; border-radius: 10px 0 0 10px;
+        }
+        .doblez-r {
+            position: absolute; bottom: 0; right: 0;
+            border-top: 90px solid transparent; border-bottom: 90px solid transparent;
+            border-right: 140px solid #2a2a2a; z-index: 2; border-radius: 0 10px 10px 0;
+        }
+        .solapa {
+            position: absolute; top: 0; left: 0;
+            border-left: 140px solid transparent; border-right: 140px solid transparent;
+            border-top: 110px solid #444; transform-origin: top;
+            transition: 0.6s; z-index: 4; border-radius: 10px 10px 0 0;
+        }
+        .sello {
+            position: absolute; top: 90px; left: 50%; transform: translate(-50%, -50%);
+            font-size: 3rem; z-index: 5; filter: drop-shadow(0 0 8px gold);
+        }
+        .el-sobre.abierto .solapa { transform: rotateX(180deg); z-index: 1; }
+
+        /* ================= CARTA ================= */
+        #pantalla-carta {
+            display: none;
+            width: 100%;
+            max-width: 380px;
+            background: #0f0f0f;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 30px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0,0,0,1);
+            opacity: 0;
+            transition: 1s ease-out;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .bateria-box {
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            margin-bottom: 20px; color: #888; font-size: 0.75rem;
+        }
+        .bateria-cuerpo { width: 40px; height: 16px; border: 2px solid #ffd700; border-radius: 4px; padding: 2px; }
+        .bateria-carga { height: 100%; width: 100%; background: #ffd700; }
+
+        .reloj {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 25px;
+        }
+        .bloque {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255, 215, 0, 0.2);
+            padding: 10px 2px; border-radius: 10px;
+        }
+        .bloque b { display: block; font-size: 1.2rem; color: #fff; }
+        .bloque span { font-size: 0.55rem; color: #ffd700; font-weight: bold; }
+
+        .texto-romantico {
+            color: #ddd; font-size: 0.9rem; line-height: 1.6; margin-bottom: 25px;
+        }
+        .texto-romantico b { color: #ffd700; }
+
+        /* REPRODUCTOR */
+        .player {
+            background: rgba(255, 255, 255, 0.03); border-radius: 20px; padding: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        .player-info h4 { color: #fff; font-size: 0.95rem; }
+        .player-info p { color: #ffd700; font-size: 0.8rem; margin-bottom: 12px; font-weight: bold; }
+        
+        .controles { display: flex; align-items: center; justify-content: center; gap: 20px; }
+        .btn-play {
+            background: #ffd700; border: none; width: 40px; height: 40px;
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .nav-btn { color: #ffd700; font-size: 1rem; }
+
+        .barra-p { width: 100%; height: 3px; background: #333; margin-top: 15px; border-radius: 2px; }
+        .progreso { width: 85%; height: 100%; background: #ffd700; }
+
+    </style>
+</head>
+<body>
+
+    <audio id="cancion" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="pantalla-sobre">
+        <div class="texto-for-you">FOR YOU</div>
+        <div class="el-sobre" id="sobre-clic" onclick="abrirTodo()">
+            <div class="doblez-r"></div>
+            <div class="solapa"></div>
+            <div class="sello">🖤</div>
+        </div>
+    </div>
+
+    <div id="pantalla-carta">
+        <h1>NUESTRO PRIMER MES</h1>
+
+        <div class="bateria-box">
+            <span>Contigo me siento al: </span>
+            <div class="bateria-cuerpo"><div class="bateria-carga"></div></div>
+            <span>100%</span>
+        </div>
+
+        <div class="reloj">
+            <div class="bloque"><b id="d">00</b><span>Días</span></div>
+            <div class="bloque"><b id="h">00</b><span>Hrs</span></div>
+            <div class="bloque"><b id="m">00</b><span>Min</span></div>
+            <div class="bloque"><b id="s">00</b><span>Seg</span></div>
+        </div>
+
+        <div class="texto-romantico">
+             <b>Yosh, mi niño...</b> Un mes de ser novios y de darme cuenta que eres todo lo que no sabía que necesitaba. 
+            No tienes idea de lo feliz que me haces cada que estamos juntos. 
+            Quiero que escuches con atención la canción de abajo; <b>representa exactamente todo lo que siento por ti</b> y lo que provocas en mí. 
+            Gracias por este primer mes de risas y momentos únicos. 
+            <b>Te amo como a nadie Yoshiro Pablo Armando Riaño Ishiwara.</b> ❤️
+        </div>
+
+        <div class="player">
+            <div class="player-info">
+                <h4>Talismán</h4>
+                <p>Yosh & Odemris</p>
+            </div>
+            <div class="controles">
+                <span class="nav-btn">⏮</span>
+                <button class="btn-play" id="btnPlay" onclick="toggleMusica()">⏸</button>
+                <span class="nav-btn">⏭</span>
+            </div>
+            <div class="barra-p"><div class="progreso"></div></div>
+        </div>
+    </div>
+
+    <script>
+        const cancion = document.getElementById('cancion');
+        const fechaInicio = new Date(2026, 2, 25); 
+
+        setInterval(() => {
+            const c = document.createElement('div');
+            c.className = 'chispa';
+            c.style.left = Math.random() * 100 + 'vw';
+            const s = Math.random() * 3 + 2 + 'px';
+            c.style.width = s; c.style.height = s;
+            c.style.animationDuration = Math.random() * 2 + 3 + 's';
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 5000);
+        }, 200);
+
+        function lluviaDeMensajes() {
+            const m = document.createElement('div');
+            m.className = 'msg-amor';
+            const frases = ['te amo ❤️', 'mi pequeño ✨', 'mi niño 🖤', 'amor de mi vida', 'eres mi todo'];
+            m.innerText = frases[Math.floor(Math.random() * frases.length)];
+            m.style.left = Math.random() * 90 + 'vw';
+            m.style.animationDuration = Math.random() * 3 + 4 + 's';
+            document.body.appendChild(m);
+            setTimeout(() => m.remove(), 7000);
+        }
+
+        function abrirTodo() {
+            document.getElementById('sobre-clic').classList.add('abierto');
+            setTimeout(() => {
+                document.getElementById('pantalla-sobre').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('pantalla-sobre').style.display = 'none';
+                    const carta = document.getElementById('pantalla-carta');
+                    carta.style.display = 'block';
+                    setTimeout(() => {
+                        carta.style.opacity = '1';
+                        iniciarReloj();
+                        setInterval(lluviaDeMensajes, 800); 
+                        cancion.play().catch(e => console.log("Audio listo"));
+                    }, 50);
+                }, 800);
+            }, 600);
+        }
+
+        function iniciarReloj() {
+            setInterval(() => {
+                const diff = Math.abs(new Date() - fechaInicio);
+                document.getElementById('d').innerText = Math.floor(diff/86400000).toString().padStart(2, '0');
+                document.getElementById('h').innerText = Math.floor((diff/3600000)%24).toString().padStart(2, '0');
+                document.getElementById('m').innerText = Math.floor((diff/60000)%60).toString().padStart(2, '0');
+                document.getElementById('s').innerText = Math.floor((diff/1000)%60).toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        function toggleMusica() {
+            const btn = document.getElementById('btnPlay');
+            if (cancion.paused) { cancion.play(); btn.innerText = "⏸"; } 
+            else { cancion.pause(); btn.innerText = "▶"; }
+        }
+    </script>
+</body>
+</html>
